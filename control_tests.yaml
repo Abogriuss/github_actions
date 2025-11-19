@@ -1,26 +1,32 @@
 name: Control Push
-on: push
+on: [push]
+
 jobs:
   qa:
     name: Check tests
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout on master
+      # L'action checkout permet d'accéder aux fichiers du dépôt
+      - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Configuration de l'environnement Python
       - name: Set up Python
-        uses: actions/setup-python@master
+        uses: actions/setup-python@v4 # Utilisé v4 pour la dernière version stable
         with:
           python-version: "3.x"
 
-      - name: Install pytest and flake8
+      # Installation des dépendances
+      - name: Install dependencies
         run: |
           pip install pytest
           pip install flake8
 
+      # Exécution des tests unitaires
       - name: Run tests
         run: |
           pytest
 
+      # Exécution du linter (va échouer comme prévu s'il y a des erreurs PEP8)
       - name: Run flake8
         uses: py-actions/flake8@v2
